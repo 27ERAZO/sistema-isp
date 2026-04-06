@@ -1,0 +1,227 @@
+.inventario-wrapper {
+  width: 100%;
+  padding: 24px;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+.inventario-header {
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+.inventario-header h1 {
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  font-size: 2rem;
+}
+
+.inventario-header p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 1rem;
+}
+
+.inventario-alertas {
+  margin-bottom: 20px;
+}
+
+.alerta-exito,
+.alerta-error {
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.alerta-exito {
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #bbf7d0;
+}
+
+.alerta-error {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fecaca;
+}
+
+.inventario-paneles,
+.inventario-listados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.inventario-resumen {
+  margin-bottom: 24px;
+}
+
+.inventario-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 24px !important;
+  padding: 24px !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22) !important;
+  box-sizing: border-box !important;
+}
+
+.inventario-card h2 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.inventario-card input,
+.inventario-card select,
+.inventario-card textarea {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  outline: none;
+  background: rgba(15, 23, 42, 0.92) !important;
+  color: #ffffff !important;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.inventario-card input::placeholder,
+.inventario-card textarea::placeholder {
+  color: #cbd5e1;
+}
+
+.inventario-card select {
+  appearance: none;
+}
+
+.inventario-card select option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.inventario-card input:focus,
+.inventario-card select:focus,
+.inventario-card textarea:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.btn-guardar,
+.btn-movimiento {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+  color: #ffffff;
+}
+
+.btn-guardar {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.btn-movimiento {
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+}
+
+.btn-guardar:hover,
+.btn-movimiento:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.btn-guardar:disabled,
+.btn-movimiento:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resumen-card {
+  padding-bottom: 20px;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.resumen-item {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.resumen-item span {
+  display: block;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.resumen-item strong {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.tabla-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabla-inventario {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.tabla-inventario th,
+.tabla-inventario td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabla-inventario th {
+  color: #7dd3fc;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.tabla-inventario td {
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.tabla-inventario tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 768px) {
+  .inventario-wrapper {
+    padding: 16px;
+  }
+
+  .inventario-header,
+  .inventario-card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .inventario-header h1 {
+    font-size: 1.5rem;
+  }
+}
