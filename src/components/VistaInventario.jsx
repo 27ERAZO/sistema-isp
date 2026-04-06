@@ -450,7 +450,7 @@ function VistaInventario() {
                 ) : (
                   movimientos.map((mov) => (
                     <tr key={mov.id}>
-                      <td>{mov.inventario_productos?.nombre || 'Producto'}</td>
+                      <td>{mov.inventario_productos?.nombre || productos.find(p => p.id === mov.producto_id)?.nombre || 'Producto'}</td>
                       <td>{mov.tipo}</td>
                       <td>{mov.cantidad}</td>
                       <td>{mov.descripcion || '-'}</td>
