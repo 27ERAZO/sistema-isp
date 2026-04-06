@@ -500,3 +500,8 @@ function VistaInventario() {
 }
 
 export default VistaInventario
+
+.inventario-card {
+ background: red limportant;
+  color: white limportant;
+}
