@@ -4,6 +4,7 @@ import VistaPagoDetalle from './VistaPagoDetalle'
 
 function VistaPagos() {
   const hoy = new Date().toISOString().split('T')[0]
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001'
 
   const [pagos, setPagos] = useState([])
   const [clientes, setClientes] = useState([])
@@ -33,13 +34,13 @@ function VistaPagos() {
   }, [])
 
   if (pagoSeleccionado) {
-  return (
-    <VistaPagoDetalle
-      pagoData={pagoSeleccionado}
-      onVolver={() => setPagoSeleccionado(null)}
-    />
-  )
-}
+    return (
+      <VistaPagoDetalle
+        pagoData={pagoSeleccionado}
+        onVolver={() => setPagoSeleccionado(null)}
+      />
+    )
+  }
 
   const obtenerPagos = async () => {
     const { data, error } = await supabase
@@ -98,31 +99,18 @@ function VistaPagos() {
   }
 
   const facturasFiltradasPorCliente = formulario.cliente_id
-    ? facturas.filter((factura) => factura.cliente_id === Number(formulario.cliente_id))
+    ? facturas.filter((factura) => String(factura.cliente_id) === String(formulario.cliente_id))
     : facturas
 
   const subirComprobante = async (archivo, clienteId, facturaId) => {
-    console.log('Entró a subirComprobante')
-    console.log('Archivo recibido:', archivo)
-    console.log('Cliente ID:', clienteId)
-    console.log('Factura ID:', facturaId)
-
-    if (!archivo) {
-      console.log('No hay archivo, no se subirá nada')
-      return null
-    }
+    if (!archivo) return null
 
     const extension = archivo.name.split('.').pop()
     const nombreArchivo = `cliente-${clienteId}/factura-${facturaId}/${Date.now()}.${extension}`
 
-    console.log('Nombre final del archivo:', nombreArchivo)
-
     const { data, error: errorSubida } = await supabase.storage
       .from('comprobantes')
       .upload(nombreArchivo, archivo)
-
-    console.log('Respuesta subida data:', data)
-    console.log('Respuesta subida error:', errorSubida)
 
     if (errorSubida) {
       console.error('Error subiendo comprobante:', errorSubida)
@@ -132,8 +120,6 @@ function VistaPagos() {
     const { data: urlData } = supabase.storage
       .from('comprobantes')
       .getPublicUrl(nombreArchivo)
-
-    console.log('URL generada:', urlData)
 
     return {
       ruta: nombreArchivo,
@@ -263,22 +249,15 @@ function VistaPagos() {
       return
     }
 
-    setMensaje('Pago registrado correctamente')
+    let mensajeFinal = 'Pago registrado correctamente'
 
     try {
       const clienteSeleccionado = clientes.find(
-        (c) => c.id === Number(formulario.cliente_id)
+        (c) => String(c.id) === String(formulario.cliente_id)
       )
 
-      const facturaSeleccionada = facturas.find(
-        (f) => f.id === Number(formulario.factura_id)
-      )
-
-      console.log('clienteSeleccionado:', clienteSeleccionado)
-      console.log('facturaSeleccionada:', facturaSeleccionada)
-      console.log('correo del cliente:', clienteSeleccionado?.correo)
-      console.log('nombre del cliente:', clienteSeleccionado?.nombres, clienteSeleccionado?.apellidos)
-      console.log('comprobanteSubido:', comprobanteSubido)
+      const facturaSeleccionada =
+        facturas.find((f) => String(f.id) === String(formulario.factura_id)) || factura
 
       const datosCorreo = {
         correoCliente: clienteSeleccionado?.correo || '',
@@ -289,12 +268,11 @@ function VistaPagos() {
         comprobanteUrl: comprobanteSubido?.url || ''
       }
 
-      console.log('Datos a enviar al backend de correo:', datosCorreo)
-
       if (!datosCorreo.correoCliente) {
         console.warn('El cliente no tiene correo registrado, no se enviará email')
+        mensajeFinal = 'Pago registrado correctamente. El cliente no tiene correo registrado.'
       } else {
-        const respuestaCorreo = await fetch('http://localhost:3001/enviar-correo', {
+        const respuestaCorreo = await fetch(`${BACKEND_URL}/enviar-correo-pago`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -308,11 +286,15 @@ function VistaPagos() {
 
         if (!respuestaCorreo.ok) {
           console.error('Error del backend al enviar correo:', resultadoCorreo)
+          mensajeFinal = 'Pago registrado correctamente, pero no se pudo enviar el correo.'
         }
       }
     } catch (error) {
       console.error('Error enviando correo:', error)
+      mensajeFinal = 'Pago registrado correctamente, pero el correo no pudo enviarse.'
     }
+
+    setMensaje(mensajeFinal)
 
     setFormulario({
       cliente_id: '',
@@ -591,8 +573,8 @@ function VistaPagos() {
                   <th style={thEstilo}>Referencia</th>
                   <th style={thEstilo}>Fecha</th>
                   <th style={thEstilo}>Comprobante</th>
-                  <th style={thEstilo}>Acciones</th>
                   <th style={thEstilo}>Ver</th>
+                  <th style={thEstilo}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -617,20 +599,20 @@ function VistaPagos() {
                       )}
                     </td>
                     <td style={tdEstilo}>
-  <button
-    onClick={() => setPagoSeleccionado(pago)}
-    style={{
-      padding: '8px 12px',
-      border: 'none',
-      borderRadius: '6px',
-      backgroundColor: '#2563eb',
-      color: '#000000',
-      cursor: 'pointer'
-    }}
-  >
-    Ver
-  </button>
-</td>
+                      <button
+                        onClick={() => setPagoSeleccionado(pago)}
+                        style={{
+                          padding: '8px 12px',
+                          border: 'none',
+                          borderRadius: '6px',
+                          backgroundColor: '#2563eb',
+                          color: '#000000',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Ver
+                      </button>
+                    </td>
                     <td style={tdEstilo}>
                       <button
                         onClick={() => eliminarPago(pago)}
