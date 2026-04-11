@@ -95,7 +95,13 @@ function VistaFacturacion() {
     e.preventDefault()
     setMensaje('')
 
-    if (!formulario.cliente_id || !formulario.periodo || !formulario.subtotal || !formulario.fecha_emision || !formulario.fecha_vencimiento) {
+    if (
+      !formulario.cliente_id ||
+      !formulario.periodo ||
+      !formulario.subtotal ||
+      !formulario.fecha_emision ||
+      !formulario.fecha_vencimiento
+    ) {
       setMensaje('Debes completar cliente, período, subtotal, fecha de emisión y vencimiento')
       return
     }
@@ -155,7 +161,10 @@ function VistaFacturacion() {
       const { data: facturaInsertada, error: errorInsert } = await supabase
         .from('facturas')
         .insert([payload])
-        .select()
+        .select(`
+          *,
+          clientes ( id, nombres, apellidos, correo )
+        `)
         .single()
 
       if (errorInsert || !facturaInsertada) {
